@@ -56,6 +56,8 @@ import { ProductComponent } from './product/product.component';
 import { ProductListComponent } from './product/product-list.component';
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerlistComponent } from './customer/customer-list.component';
+import { PageNotFoundComponent } from './page-not-found.component';
+
 
 
 
@@ -112,7 +114,8 @@ export function myHttpLoader(http: HttpClient) {
     ProductComponent,
     ProductListComponent,
     CustomerComponent,
-    CustomerlistComponent
+    CustomerlistComponent,
+    PageNotFoundComponent 
  
 
     
