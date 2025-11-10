@@ -15,13 +15,14 @@ export class LoginComponent implements OnInit {
 
   endpoint = "http://localhost:8084/Auth";
 
-  form = {
+  inputerror: any = {};
+  form: any = {
     error: false,
     message: '',
     loginId: '',
     password: '',
-    loginUrl: '',
-    inputerror: {}               // ✅ Added inside form
+    loginUrl: ''
+               // ✅ Added inside form
   };
 
   userparams = {
