@@ -42,10 +42,6 @@ import { CustomerlistComponent } from './customer/customer-list.component';
 
 
 const routes: Routes = [
-  
-    { path: '**',
-        component: PageNotFoundComponent 
-    },
 
     {
         path: '',
