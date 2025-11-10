@@ -14,6 +14,8 @@ import { CollegeComponent } from './college/college.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { PageNotFoundComponent } from './page-not-found.component';
+
 
 import { HttpServiceService } from './http-service.service';
 import { LoginComponent } from './login/login.component';
@@ -88,6 +90,7 @@ export function myHttpLoader(http: HttpClient) {
     MessageListComponent,
     UserComponent,
     UserListComponent,
+    PageNotFoundComponent,
 
     RoleComponent,
     RoleListComponent,
