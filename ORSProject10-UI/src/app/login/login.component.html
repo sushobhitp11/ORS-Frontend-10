@@ -1,121 +1,138 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpServiceService } from '../http-service.service';
-import { Router } from '@angular/router';
-import { DataValidator } from '../utility/data-validator';
-import { CookieService } from 'ngx-cookie-service';
-import { ActivatedRoute } from '@angular/router';
-import { ServiceLocatorService } from '../service-locator.service';
+<app-navbar #one></app-navbar>
 
-@Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-})
-export class LoginComponent implements OnInit {
-
-  endpoint = "http://localhost:8084/Auth";
-
-  // ✅ Fix: form object must match HTML bindings exactly
-  form: any = {
-    error: false,
-    message: '',
-    loginId: '',
-    password: '',
-    loginUrl: '',
-    inputerror: {}        // ✅ IMPORTANT: Add this because HTML reads form.inputerror
-  };
-
-  // ✅ Fix: keep a direct reference also (your HTML uses inputerror directly)
-  inputerror: any = {};
-
-  userparams: any = {
-    url: '',
-    sessionExpiredMsg: '',
-    methodType: '',
-  };
-
-  constructor(
-    private httpService: HttpServiceService,
-    private dataValidator: DataValidator,
-    private router: Router,
-    private cookieService: CookieService,
-    private route: ActivatedRoute,
-    private serviceLocator: ServiceLocatorService
-  ) {}
-
-  ngOnInit() {
-
-    if (this.httpService.form.error == true) {
-      this.form.message = this.httpService.form.message;
-      this.form.error = this.httpService.form.error;
-    }
-
-    let a = '';
-    this.serviceLocator.getPathVariable(this.route, function (params) {
-      a = params["userparams"];
-    });
-
-    if (a === 'true') {
-      this.form.message = 'Logout Successfully';
-      this.form.error = false;
-    }
+<style>
+  #nnn {
+    background: none;
+    border: none;
   }
 
-  validate() {
-    return (
-      this.dataValidator.isNotNull(this.form.loginId) &&
-      this.dataValidator.isNotNull(this.form.password)
-    );
+  .log1 {
+    padding-top: 13%;
   }
 
-  signIn() {
-
-    this.form.error = false;
-    const _self = this;
-
-    const requestedUrl = this.httpService.userparams.url;
-
-    this.httpService.post(this.endpoint + "/login", this.form, function (res) {
-
-      // ✅ Reset errors
-      _self.form.message = '';
-      _self.form.inputerror = {};
-      _self.inputerror = {};
-
-      // ✅ Message
-      if (_self.dataValidator.isNotNullObject(res.result.message)) {
-        _self.form.message = res.result.message;
-      }
-
-      // ✅ Error flag
-      _self.form.error = !res.success;
-
-      // ✅ Field input errors
-      if (_self.dataValidator.isNotNullObject(res.result.inputerror)) {
-        _self.inputerror = res.result.inputerror;
-        _self.form.inputerror = res.result.inputerror;
-      }
-
-      // ✅ Login success
-      if (res.success) {
-
-        _self.httpService.setToken(res.result.token);
-
-        localStorage.setItem("loginId", res.result.loginId);
-        localStorage.setItem("token", "Bearer " + res.result.token);
-        localStorage.setItem("role", res.result.role);
-        localStorage.setItem("fname", res.result.fname);
-        localStorage.setItem("lname", res.result.lname);
-        localStorage.setItem("userid", res.result.data.id);
-
-        if (requestedUrl) {
-          _self.router.navigateByUrl(requestedUrl);
-        } else {
-          _self.router.navigateByUrl('dashboard');
-        }
-      }
-
-    });
+  .input-group-addon {
+    box-shadow: 9px 8px 7px #001a33;
   }
 
-}
+  .grad {
+    background-image: linear-gradient(to bottom right, rgb(32, 168, 168), rgb(219, 231, 237));
+    background-repeat: no-repeat;
+    background-size: 100%;
+    padding-bottom: 10px;
+  }
+</style>
+
+<div class="row"
+     style="padding-top: 8%; padding-bottom: 8%;
+            background: url(assets/files/Login3.jpg) no-repeat center center;
+            background-attachment: fixed;
+            background-size: 225vh; width:auto; height:105vh;">
+
+  <div class="col-sm-4"></div>
+
+  <div class="col-sm-4">
+    <div class="card input-group-addon grad">
+      <div class="card-body">
+
+        <form>
+
+          <div style="text-align: center;">
+            <h1 class="text-primary">{{'Login' | translate}}</h1>
+          </div>
+
+          <!-- ✅ FIXED: name="loginUrl" correctly in one line -->
+          <input type="hidden" name="loginUrl" [(ngModel)]="form.loginUrl">
+
+          <!-- ERROR MESSAGE -->
+          <div *ngIf="form.error && form.message === 'Invalid ID or Password'"
+               class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ 'Invalid ID or Password' | translate }}
+          </div>
+
+          <!-- SUCCESS MESSAGE -->
+          <div *ngIf="!form.error && form.message === 'Logout Successfully'"
+               class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ 'Log out successfully' | translate }}
+          </div>
+
+          <!-- SESSION EXPIRED -->
+          <div *ngIf="form.error && form.message === 'Your Session has been Expired! Please Re-Login'"
+               class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{form.message | translate}}
+          </div>
+
+          <!-- EMAIL -->
+          <div style="padding-top:3%">
+            <span class="pt-2"><b>{{'Email Id' | translate}}</b>
+              <span class="required-field"></span></span>
+
+            <div class="col-sm-12">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text"><i class="fa fa-envelope grey-text"></i></div>
+                </div>
+                <input type="text"
+                       name="loginId"
+                       [(ngModel)]="form.loginId"
+                       class="form-control"
+                       placeholder="{{'Enter Login Id' | translate}}">
+              </div>
+            </div>
+
+            <span *ngIf="inputerror?.loginId" class="alertRedColor" style="color:red;">
+              {{ inputerror.loginId }}
+            </span>
+          </div>
+
+          <!-- PASSWORD -->
+          <div style="padding-top:3%">
+            <span><b>{{'Password' | translate}}</b>
+              <span class="required-field"></span></span>
+
+            <div class="col-sm-12">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text"><i class="fa fa-key grey-text"></i></div>
+                </div>
+                <input type="password"
+                       name="pwd"
+                       [(ngModel)]="form.password"
+                       class="form-control"
+                       placeholder="{{'Enter Password' | translate}}">
+              </div>
+            </div>
+
+            <span *ngIf="inputerror?.password" class="alertRedColor" style="color:red;">
+              {{ inputerror.password }}
+            </span>
+          </div>
+
+          <!-- BUTTONS -->
+          <div class="row pt-3 pb-3" style="text-align:center;">
+            <div class="col-sm-6 pt-2">
+              <button type="button"
+                      (click)="signIn()"
+                      class="btn btn-md btn-success">
+                {{ 'Sign in' | translate }}
+              </button>
+            </div>
+
+            <div class="col-sm-6 pt-2">
+              <a class="btn btn-warning"
+                 [routerLink]="['/forgotpassword']">
+                {{ 'Forgot Password' | translate }}
+              </a>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
