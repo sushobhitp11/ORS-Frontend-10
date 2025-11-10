@@ -1,134 +1,111 @@
-<app-navbar #one></app-navbar>
+import { Component, OnInit } from '@angular/core';
+import { HttpServiceService } from '../http-service.service';
+import { Router } from '@angular/router';
+import { DataValidator } from '../utility/data-validator';
+import { CookieService } from 'ngx-cookie-service';
+import { ActivatedRoute } from '@angular/router';
+import { ServiceLocatorService } from '../service-locator.service';
 
-<style>
-  #nnn {
-    background: none;
-    border: none;
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+
+export class LoginComponent implements OnInit {
+
+  endpoint = "http://localhost:8084/Auth";
+
+  form: any = {
+    error: false,
+    message: '',
+    loginId: '',
+    password: '',
+    loginUrl: ''
+  };
+
+  // ✅ Jenkins Error Fix
+  inputerror: any = {};
+
+  userparams = {
+    url: '',
+    sessionExpiredMsg: '',
+    methodType: '',
+  };
+
+  constructor(
+    private httpService: HttpServiceService,
+    private dataValidator: DataValidator,
+    private router: Router,
+    private cookieService: CookieService,
+    private route: ActivatedRoute,
+    private serviceLocator: ServiceLocatorService
+  ) {}
+
+  ngOnInit() {
+    if (this.httpService.form.error == true) {
+      this.form.message = this.httpService.form.message;
+      this.form.error = this.httpService.form.error;
+    }
+
+    var a = '';
+    this.serviceLocator.getPathVariable(this.route, function (params) {
+      a = params["userparams"];
+    });
+
+    if (a == 'true') {
+      this.form.message = 'Logout Successfully';
+      this.form.error = false;
+    }
   }
 
-  .log1 {
-    padding-top: 13%;
+  validate() {
+    return (
+      this.dataValidator.isNotNull(this.form.loginId) &&
+      this.dataValidator.isNotNull(this.form.password)
+    );
   }
 
-  .input-group-addon {
-    box-shadow: 9px 8px 7px #001a33;
+  signIn() {
+
+    this.form.error = false;
+    const _self = this;
+
+    const requestedUrl = this.httpService.userparams.url;
+
+    this.httpService.post(this.endpoint + "/login", this.form, function (res) {
+
+      _self.form.message = '';
+      _self.inputerror = {};
+
+      if (_self.dataValidator.isNotNullObject(res.result.message)) {
+        _self.form.message = res.result.message;
+      }
+
+      _self.form.error = !res.success;
+
+      if (_self.dataValidator.isNotNullObject(res.result.inputerror)) {
+        _self.inputerror = res.result.inputerror;
+      }
+
+      if (res.success) {
+        _self.httpService.setToken(res.result.token);
+
+        localStorage.setItem("loginId", res.result.loginId);
+        localStorage.setItem("token", "Bearer " + res.result.token);
+        localStorage.setItem("role", res.result.role);
+        localStorage.setItem("fname", res.result.fname);
+        localStorage.setItem("lname", res.result.lname);
+        localStorage.setItem("userid", res.result.data.id);
+
+        if (requestedUrl) {
+          _self.router.navigateByUrl(requestedUrl);
+        } else {
+          _self.router.navigateByUrl('dashboard');
+        }
+      }
+
+    });
   }
 
-  .grad {
-    background-image: linear-gradient(to bottom right, rgb(32, 168, 168), rgb(219, 231, 237));
-    background-repeat: no-repeat;
-    background-size: 100%;
-    padding-bottom: 10px;
-  }
-</style>
-
-<div class="row"
-     style="padding-top: 8%; padding-bottom: 8%;
-            background: url(assets/files/Login3.jpg) no-repeat center center;
-            background-attachment: fixed;
-            background-size: 225vh; width:auto; height:105vh;">
-
-  <div class="col-sm-4"></div>
-
-  <div class="col-sm-4">
-    <div class="card input-group-addon grad">
-      <div class="card-body">
-
-        <form>
-
-          <div class="text-center">
-            <h1 class="text-primary">{{ 'Login' | translate }}</h1>
-          </div>
-
-          <input type="hidden" name="loginUrl" [(ngModel)]="form.loginUrl">
-
-          <!-- ERROR MESSAGE -->
-          <div *ngIf="form.error && form.message"
-               class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ form.message | translate }}
-          </div>
-
-          <!-- SUCCESS MESSAGE -->
-          <div *ngIf="!form.error && form.message"
-               class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ form.message | translate }}
-          </div>
-
-          <!-- EMAIL -->
-          <div style="padding-top:3%">
-            <span class="pt-2"><b>{{ 'Email Id' | translate }}</b>
-              <span class="required-field"></span></span>
-
-            <div class="col-sm-12">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <div class="input-group-text"><i class="fa fa-envelope grey-text"></i></div>
-                </div>
-                <input type="text"
-                       name="loginId"
-                       [(ngModel)]="form.loginId"
-                       class="form-control"
-                       placeholder="{{ 'Enter Login Id' | translate }}">
-              </div>
-            </div>
-
-            <span *ngIf="inputerror?.loginId"
-                  class="alertRedColor"
-                  style="color:red;">
-              {{ inputerror.loginId }}
-            </span>
-          </div>
-
-          <!-- PASSWORD -->
-          <div style="padding-top:3%">
-            <span><b>{{ 'Password' | translate }}</b>
-              <span class="required-field"></span></span>
-
-            <div class="col-sm-12">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <div class="input-group-text"><i class="fa fa-key grey-text"></i></div>
-                </div>
-                <input type="password"
-                       name="pwd"
-                       [(ngModel)]="form.password"
-                       class="form-control"
-                       placeholder="{{ 'Enter Password' | translate }}">
-              </div>
-            </div>
-
-            <span *ngIf="inputerror?.password"
-                  class="alertRedColor"
-                  style="color:red;">
-              {{ inputerror.password }}
-            </span>
-          </div>
-
-          <!-- BUTTONS -->
-          <div class="row pt-3 pb-3" style="text-align:center;">
-            <div class="col-sm-6 pt-2">
-              <button type="button"
-                      (click)="signIn()"
-                      class="btn btn-md btn-success">
-                {{ 'Sign in' | translate }}
-              </button>
-            </div>
-
-            <div class="col-sm-6 pt-2">
-              <a class="btn btn-warning"
-                 [routerLink]="['/forgotpassword']">
-                {{ 'Forgot Password' | translate }}
-              </a>
-            </div>
-          </div>
-
-        </form>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<app-footer></app-footer>
+}
