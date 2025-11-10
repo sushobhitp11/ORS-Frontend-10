@@ -11,23 +11,24 @@ import { ServiceLocatorService } from '../service-locator.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
 export class LoginComponent implements OnInit {
 
   endpoint = "http://localhost:8084/Auth";
 
+  // ✅ Fix: form object must match HTML bindings exactly
   form: any = {
     error: false,
     message: '',
     loginId: '',
     password: '',
-    loginUrl: ''
+    loginUrl: '',
+    inputerror: {}        // ✅ IMPORTANT: Add this because HTML reads form.inputerror
   };
 
-  // ✅ Jenkins Error Fix
+  // ✅ Fix: keep a direct reference also (your HTML uses inputerror directly)
   inputerror: any = {};
 
-  userparams = {
+  userparams: any = {
     url: '',
     sessionExpiredMsg: '',
     methodType: '',
@@ -43,17 +44,18 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
     if (this.httpService.form.error == true) {
       this.form.message = this.httpService.form.message;
       this.form.error = this.httpService.form.error;
     }
 
-    var a = '';
+    let a = '';
     this.serviceLocator.getPathVariable(this.route, function (params) {
       a = params["userparams"];
     });
 
-    if (a == 'true') {
+    if (a === 'true') {
       this.form.message = 'Logout Successfully';
       this.form.error = false;
     }
@@ -75,20 +77,28 @@ export class LoginComponent implements OnInit {
 
     this.httpService.post(this.endpoint + "/login", this.form, function (res) {
 
+      // ✅ Reset errors
       _self.form.message = '';
+      _self.form.inputerror = {};
       _self.inputerror = {};
 
+      // ✅ Message
       if (_self.dataValidator.isNotNullObject(res.result.message)) {
         _self.form.message = res.result.message;
       }
 
+      // ✅ Error flag
       _self.form.error = !res.success;
 
+      // ✅ Field input errors
       if (_self.dataValidator.isNotNullObject(res.result.inputerror)) {
         _self.inputerror = res.result.inputerror;
+        _self.form.inputerror = res.result.inputerror;
       }
 
+      // ✅ Login success
       if (res.success) {
+
         _self.httpService.setToken(res.result.token);
 
         localStorage.setItem("loginId", res.result.loginId);
