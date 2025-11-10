@@ -1,221 +1,139 @@
-<app-navbar></app-navbar>
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpServiceService } from '../http-service.service';
 
-<style>
-  #nnn {
-    background: none;
-    border: none;
+@Component({
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
+})
+export class UserlistComponent implements OnInit {
+
+  // ✅ MASTER CHECKBOX
+  isMasterSel: boolean = false;
+
+  // ✅ NEXT PAGE BUTTON ENABLE/DISABLE
+  nextList: number = 0;
+
+  // ✅ COMPLETE FORM STRUCTURE (Jenkins Required)
+  form: any = {
+
+    error: false,
+    message: '',
+    pageNo: 0,
+
+    searchParams: {
+      firstName: '',
+      roleId: null
+    },
+
+    preload: {
+      roleList: []
+    },
+
+    list: []            // ✅ User table data
+  };
+
+  constructor(private router: Router,
+              private httpService: HttpServiceService) {}
+
+  ngOnInit() {
+    this.preload();
+    this.search();
   }
-</style>
 
-<div class="content-wrapper" style="padding-top: 7%;
-background: url(assets/files/wall.jpg) no-repeat center center;
-background-attachment: fixed;
-background-size: cover; width:auto;
-height: 119vh;">
+  // ✅ PRELOAD ROLE LIST
+  preload() {
+    this.httpService.get('/User/preload', res => {
+      if (res.success) {
+        this.form.preload.roleList = res.result.roleList;
+      }
+    });
+  }
 
-  <div class="container-fluid padding-bottom: 20px;">
+  // ✅ SEARCH USERS
+  search() {
+    this.httpService.post('/User/search/' + this.form.pageNo, this.form.searchParams, res => {
 
-    <div class="panel panel-primary">
+      this.form.list = res.result.data;
+      this.form.error = res.error;
+      this.form.message = res.message;
 
-      <div class="panel-heading" style="height: 50px;">
-        <div class="text-center">
-          <h1 class="text-primary font-weight-bold">{{ 'User List' | translate }}</h1>
-        </div>
-      </div>
+      this.nextList = res.result.nextList;
+    });
+  }
 
-      <!-- SEARCH BAR -->
-      <div class="row p-1">
+  // ✅ SEARCH BUTTON
+  submit() {
+    this.form.pageNo = 0;
+    this.search();
+  }
 
-        <div class="col-sm-1"></div>
+  // ✅ PAGINATION
+  previous() {
+    if (this.form.pageNo > 0) {
+      this.form.pageNo--;
+      this.search();
+    }
+  }
 
-        <div class="col-sm-2">
-          <input 
-            type="text" 
-            class="form-control"
-            [(ngModel)]="form.searchParams.firstName"
-            placeholder="{{ 'Search First Name' | translate }}">
-        </div>
+  next() {
+    if (this.nextList !== 0) {
+      this.form.pageNo++;
+      this.search();
+    }
+  }
 
-        <div class="col-sm-2">
-          <select 
-            class="form-control"
-            name="roleId"
-            [(ngModel)]="form.searchParams.roleId">
+  // ✅ OPEN USER FORM
+  forward(url: string) {
+    this.router.navigateByUrl(url);
+  }
 
-            <!-- ✅ FIX: ngValue="" is invalid, use null -->
-            <option [ngValue]="null">{{ ' Select Role' | translate }}</option>
+  // ✅ SELECT ALL CHECKBOX
+  checkUncheckAll(event: any) {
+    this.isMasterSel = event.target.checked;
+    this.form.list.forEach((u: any) => {
+      if (u.roleName !== 'Admin') {
+        u.selected = this.isMasterSel;
+      }
+    });
+  }
 
-            <option 
-              *ngFor="let obj of form.preload.roleList" 
-              [value]="obj.key">
-              {{ obj.value }}
-            </option>
-          </select>
-        </div>
+  // ✅ UPDATE SINGLE CHECKBOX
+  checklistUpdate() {
+    let total = this.form.list.filter((u: any) => u.roleName !== 'Admin').length;
+    let selected = this.form.list.filter((u: any) => u.selected).length;
+    this.isMasterSel = (total === selected);
+  }
 
-        <div class="col-sm-2"></div>
+  // ✅ DELETE SELECTED
+  deleteMany() {
+    let ids: any[] = [];
+    this.form.list.forEach((u: any) => {
+      if (u.selected === true) {
+        ids.push(u.id);
+      }
+    });
 
-        <div class="col-sm-1 ml-3">
-          <button (click)="submit()" class="btn btn-primary">
-            {{ 'Search' | translate }}
-          </button>
-        </div>
+    if (ids.length === 0) {
+      this.form.error = true;
+      this.form.message = "Please select at least one user!";
+      return;
+    }
 
-        <div class="col-lg-2 ml-4">
-          <button 
-            (click)="forward('/user')" 
-            type="button" 
-            class="btn btn-success">
-            {{ 'Add User' | translate }}
-          </button>
-        </div>
+    this.httpService.post('/User/deleteMany', { ids: ids }, res => {
+      this.form.error = res.error;
+      this.form.message = res.message;
+      this.search();
+    });
+  }
 
-        <div class="col-sm-1">
-          <button (click)="deleteMany()" class="btn btn-danger">
-            {{ 'Delete' | translate }}
-          </button>
-        </div>
-
-      </div>
-
-      <!-- ALERTS -->
-      <div *ngIf="form.error" class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ form.message }}
-      </div>
-
-      <div *ngIf="!form.error && form.message" class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ form.message }}
-      </div>
-
-      <!-- TABLE -->
-      <div class="p-1">
-        <div class="table-responsive">
-
-          <table class="table table-bordered table-dark table-hover font-weight-bold">
-            <thead class="thead-dark text-uppercase">
-              <tr align="center">
-
-                <th>
-                  <input 
-                    type="checkbox" 
-                    [(ngModel)]="isMasterSel"
-                    (change)="checkUncheckAll($event)" />
-                </th>
-
-                <th>{{ 'S.No' | translate }}</th>
-                <th>{{ 'Image' | translate }}</th>
-                <th>{{ 'First Name' | translate }}</th>
-                <th>{{ 'Last Name' | translate }}</th>
-                <th>{{ 'Login' | translate }}</th>
-                <th>{{ 'Status' | translate }}</th>
-                <th>{{ 'Role' | translate }}</th>
-                <th>{{ 'Phone' | translate }}</th>
-                <th>{{ 'DOB' | translate }}</th>
-                <th>{{ 'Edit' | translate }}</th>
-
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr *ngFor="let m of form.list; let i = index" align="center">
-
-                <td>
-                  <input 
-                    type="checkbox"
-                    #checkboxes
-                    (change)="checklistUpdate()"
-                    [disabled]="m.roleName === 'Admin'"
-                    [id]="m.id"
-                    [value]="isMasterSel" />
-                </td>
-
-                <td>{{ (form.pageNo * 5) + i + 1 }}</td>
-
-                <td>
-                  <div *ngIf="m.imageId">
-                    <img 
-                      [src]="'http://localhost:8084/User/profilePic/' + m.id"
-                      height="55" width="80"
-                      style="border-radius: 50%;">
-                  </div>
-
-                  <div *ngIf="!m.imageId">
-                    <img 
-                      src="../../assets/files/default.jpg"
-                      height="55" width="80"
-                      style="border-radius: 50%;">
-                  </div>
-                </td>
-
-                <td>{{ m.firstName }}</td>
-                <td>{{ m.lastName }}</td>
-                <td>{{ m.loginId }}</td>
-                <td>{{ m.status }}</td>
-                <td>{{ m.roleName }}</td>
-                <td>{{ m.phone }}</td>
-                <td>{{ m.dob | date : 'dd-MM-yyyy' }}</td>
-
-                <td>
-                  <button 
-                    class="fa fa-edit text-primary" 
-                    id="nnn"
-                    [disabled]="m.roleName === 'Admin'"
-                    (click)="forward('/user/' + m.id)"
-                    style="cursor: pointer;">
-                  </button>
-                </td>
-
-              </tr>
-            </tbody>
-
-          </table>
-
-          <!-- PAGINATION -->
-          <table style="width: 100%;">
-            <tr>
-
-              <td style="width: 50%;">
-                <button 
-                  (click)="previous()" 
-                  [disabled]="form.pageNo === 0" 
-                  class="btn btn-info">
-                  {{ 'Previous' | translate }}
-                </button>
-              </td>
-
-              <td *ngIf="form.list.length === 0" style="width: 50%;">
-                <a 
-                  class="btn btn-warning mr-1"
-                  [routerLink]="['/userlist']" 
-                  (click)="exit()">
-                  {{ 'Back' | translate }}
-                </a>
-              </td>
-
-              <td *ngIf="form.list.length !== 0" style="width: 50%;"></td>
-
-              <td>
-                <button 
-                  (click)="next()" 
-                  [disabled]="nextList === 0"
-                  type="button" 
-                  class="btn btn-info">
-                  {{ 'Next' | translate }}
-                </button>
-              </td>
-
-            </tr>
-          </table>
-
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<app-footer></app-footer>
+  // ✅ RESET SEARCH
+  exit() {
+    this.form.searchParams = {
+      firstName: '',
+      roleId: null
+    };
+    this.submit();
+  }
+}
