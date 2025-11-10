@@ -9,9 +9,9 @@
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": false,
+    "fullTemplateTypeCheck": true,
     "strictTemplates": false,
-    "skipTemplateCodegen": true,
+    "enableIvy": false,
     "preserveWhitespaces": false
   }
 }
