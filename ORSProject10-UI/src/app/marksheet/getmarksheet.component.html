@@ -1,19 +1,21 @@
 <app-navbar></app-navbar>
 
 <div style="
-background: url(assets/files/gettyimages-1132439283-640x640.jpg) no-repeat center center;
-background-attachment: fixed;
-background-size: cover;
-padding-top: 10%;
-padding-bottom: 24%;
-width:100%;
-height:119vh;">
-  
+  background: url(assets/files/gettyimages-1132439283-640x640.jpg) no-repeat center center;
+  background-attachment: fixed;
+  background-size: cover;
+  padding-top: 10%;
+  padding-bottom: 24%;
+  width:100%;
+  height:119vh;">
+
   <!-- SEARCH FORM -->
   <form name="rollForm" (ngSubmit)="go()">
     <div align="center">
       <div style="font-size: 80px;">
-        <p class="font-weight-bold text-primary">{{'Get Marksheet' | translate }}</p>
+        <p class="font-weight-bold text-primary">
+          {{ 'Get Marksheet' | translate }}
+        </p>
       </div>
     </div>
 
@@ -21,18 +23,23 @@ height:119vh;">
       <div class="col-sm-4"></div>
 
       <div class="col-md-2 col-sm-2">
-        <input type="text" name="rollNo" id="rollNo" class="form-control"
+        <input type="text"
+               name="rollNo"
+               id="rollNo"
+               class="form-control"
                [(ngModel)]="form.data.rollNo"
-               placeholder="{{'Enter Roll Number' | translate}}">
+               placeholder="{{ 'Enter Roll Number' | translate }}">
       </div>
 
       <div class="col-md-2 col-sm-2">
-        <button type="submit" [disabled]="!validate()" class="btn btn-success mr-2">
-          {{'Search' | translate}}
+        <button type="submit"
+                [disabled]="!validate()"
+                class="btn btn-success mr-2">
+          {{ 'Search' | translate }}
         </button>
 
         <a class="btn btn-primary" [routerLink]="['/getmarksheet']">
-          {{'Reset' | translate}}
+          {{ 'Reset' | translate }}
         </a>
       </div>
 
@@ -40,117 +47,120 @@ height:119vh;">
     </div>
   </form>
 
-  <!-- ERROR MESSAGE -->
-  <div *ngIf="form.error" class="alert alert-danger alert-dismissible">
+  <!-- ERROR -->
+  <div *ngIf="form.error"
+       class="alert alert-danger alert-dismissible">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    {{form.message}}
+    {{ form.message }}
   </div>
 
-  <!-- SUCCESS MESSAGE -->
-  <div *ngIf="!form.error && form.message" class="alert alert-success alert-dismissible">
+  <!-- SUCCESS -->
+  <div *ngIf="!form.error && form.message"
+       class="alert alert-success alert-dismissible">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    {{form.message}}
+    {{ form.message }}
   </div>
 
   <!-- MARKSHEET TABLE -->
-  <div class="container" *ngIf="form.list?.rollNo">
+  <div class="container"
+       *ngIf="form.list && form.list.rollNo">
 
-    <table width="100%" class="table table-bordered table-striped table-hover" border="3px">
-      
+    <table width="100%"
+           class="table table-bordered table-striped table-hover"
+           border="3px">
+
       <tr>
-        <th id="po1" colspan="2">{{'RollNO' | translate }}</th>
-        <td id="po1" colspan="3">{{form.list.rollNo}}</td>
+        <th colspan="2">{{ 'RollNO' | translate }}</th>
+        <td colspan="3">{{ form.list.rollNo }}</td>
       </tr>
 
       <tr>
-        <th id="po1" colspan="2">{{'Name' | translate }}</th>
-        <td id="po1" colspan="3">{{form.list.name}}</td>
+        <th colspan="2">{{ 'Name' | translate }}</th>
+        <td colspan="3">{{ form.list.name }}</td>
       </tr>
 
       <tr>
-        <th id="po1">{{'Marks' | translate }}</th>
-        <th id="po1" align="center">{{'Max Marks' | translate }}</th>
-        <th id="po1" align="center">{{'Min Marks' | translate }}</th>
-        <th id="po1" align="center">{{'Marks Obtain' | translate }}</th>
+        <th>{{ 'Marks' | translate }}</th>
+        <th align="center">{{ 'Max Marks' | translate }}</th>
+        <th align="center">{{ 'Min Marks' | translate }}</th>
+        <th align="center">{{ 'Marks Obtain' | translate }}</th>
       </tr>
 
       <tr>
-        <th id="po1" colspan="2">{{'Subject' | translate }}</th>
+        <th colspan="2">{{ 'Subject' | translate }}</th>
       </tr>
 
       <!-- PHYSICS -->
       <tr>
-        <th id="po1">{{'Physics' | translate }}</th>
+        <th>{{ 'Physics' | translate }}</th>
         <td align="center">100</td>
         <td align="center">35</td>
-        <td id="po1" align="center">
+        <td align="center">
           <span [ngStyle]="{'color': (form.list.physics >= 35) ? 'green' : 'red'}">
-            {{form.list.physics}}
+            {{ form.list.physics }}
           </span>
         </td>
       </tr>
 
       <!-- CHEMISTRY -->
       <tr>
-        <th id="po1">{{'Chemistry' | translate }}</th>
+        <th>{{ 'Chemistry' | translate }}</th>
         <td align="center">100</td>
         <td align="center">35</td>
-        <td id="po1" align="center">
+        <td align="center">
           <span [ngStyle]="{'color': (form.list.chemistry >= 35) ? 'green' : 'red'}">
-            {{form.list.chemistry}}
+            {{ form.list.chemistry }}
           </span>
         </td>
       </tr>
 
       <!-- MATHS -->
       <tr>
-        <th id="po1">{{'Maths' | translate }}</th>
+        <th>{{ 'Maths' | translate }}</th>
         <td align="center">100</td>
         <td align="center">35</td>
-        <td id="po1" align="center">
+        <td align="center">
           <span [ngStyle]="{'color': (form.list.maths >= 35) ? 'green' : 'red'}">
-            {{form.list.maths}}
+            {{ form.list.maths }}
           </span>
         </td>
       </tr>
 
-      <!-- TOTAL -->
+      <!-- TOTAL MARKS -->
       <tr>
-        <th id="po1" colspan="2">{{'Total' | translate }}</th>
-        <td id="po1" colspan="3" align="center">
-          {{form.list.physics + form.list.chemistry + form.list.maths}}
+        <th colspan="2">{{ 'Total' | translate }}</th>
+        <td colspan="3" align="center">
+          {{ (form.list.physics + form.list.chemistry + form.list.maths) }}
         </td>
       </tr>
 
       <!-- PERCENTAGE -->
       <tr>
-        <th id="po1" colspan="2">{{'Percentage' | translate }}</th>
-        <td id="po1" colspan="3" align="center">
+        <th colspan="2">{{ 'Percentage' | translate }}</th>
+        <td colspan="3" align="center">
           {{
             ((form.list.physics + form.list.chemistry + form.list.maths) * 100) / 300
-            | number:'2.0-2'
+            | number : '2.0-2'
           }}%
         </td>
       </tr>
 
       <!-- FINAL GRADE -->
       <tr>
-        <th id="po1" colspan="2" align="center">
-          <font color="blue">{{'Final Grade' | translate }}</font>
+        <th colspan="2" align="center" style="color:blue;">
+          {{ 'Final Grade' | translate }}
         </th>
 
-        <!-- PASS / FAIL -->
-        <td id="po1" colspan="3" align="center"
+        <td colspan="3" align="center"
             *ngIf="(((form.list.physics + form.list.chemistry + form.list.maths) * 100) / 300) >= 35; else failBlock">
-          <font color="green"><b>{{'Pass' | translate}}</b></font>
+          <b style="color:green;">{{ 'Pass' | translate }}</b>
         </td>
 
         <ng-template #failBlock>
-          <td id="po1" colspan="3" align="center">
-            <font color="red"><b>{{'Fail' | translate}}</b></font>
+          <td colspan="3" align="center">
+            <b style="color:red;">{{ 'Fail' | translate }}</b>
           </td>
         </ng-template>
-
       </tr>
 
     </table>
