@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -18,8 +17,7 @@ import { UserListComponent } from './user/user-list.component';
 import { UserComponent } from './user/user.component';
 import { RoleComponent } from './role/role.component';
 import { CourseComponent } from "./course/course.component";
-import { SubjectComponent } from "./subject/subject.component"
-import { Subject, from } from 'rxjs';
+import { SubjectComponent } from "./subject/subject.component";
 import { RoleListComponent } from './role/role-list.component';
 import { CourseListComponent } from "./course/course-list.component";
 import { FacultyComponent } from "./faculty/faculty.component";
@@ -39,273 +37,88 @@ import { ProductListComponent } from './product/product-list.component';
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerlistComponent } from './customer/customer-list.component';
 
-
-
 const routes: Routes = [
-    {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-    },
-    {
-        path: 'dashboard',
-        component: DashboardComponent
-    },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: 'dashboard', component: DashboardComponent },
 
+    // CUSTOMER
+    { path: 'customer', component: CustomerComponent },
+    { path: 'customerlist', component: CustomerlistComponent },
+    { path: 'customer/:id', component: CustomerComponent },
 
-    // ***********CUSTOMER*************
+    // PRODUCT
+    { path: 'product', component: ProductComponent },
+    { path: 'productlist', component: ProductListComponent },
+    { path: 'product/:id', component: ProductComponent },
 
-    {
-        path: 'customer',
-        component: CustomerComponent
+    // COMMON
+    { path: 'loader', component: LoaderComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'login/:userparams', component: LoginComponent },
+    { path: 'spinner', component: SpinnerComponent },
+    { path: 'forgotpassword', component: ForgotPasswordComponent },
+    { path: 'signup', component: SignUpComponent },
 
-    },
-    {
-        path: 'customerlist',
-        component: CustomerlistComponent
+    // MESSAGE
+    { path: 'message', component: MessageComponent },
+    { path: 'message/:id', component: MessageComponent },
+    { path: 'messagelist', component: MessageListComponent },
 
-    },
-    {
-        path: 'customet/:id',
-        component: CustomerComponent
+    // MARKSHEET
+    { path: 'marksheet', component: MarksheetComponent },
+    { path: 'marksheet/:id', component: MarksheetComponent },
+    { path: 'marksheetlist', component: MarksheetListComponent },
+    { path: 'marksheetmeritlist', component: MarksheetmeritListComponent },
+    { path: 'getmarksheet', component: GetmarksheetComponent },
 
-    },
+    // COLLEGE
+    { path: 'college', component: CollegeComponent },
+    { path: 'college/:id', component: CollegeComponent },
+    { path: 'collegelist', component: CollegeListComponent },
 
+    // STUDENT
+    { path: 'student', component: StudentComponent },
+    { path: 'student/:id', component: StudentComponent },
+    { path: 'studentlist', component: StudentListComponent },
 
-   
+    // USER
+    { path: 'user', component: UserComponent },
+    { path: 'user/:id', component: UserComponent },
+    { path: 'userlist', component: UserListComponent },
+    { path: 'changepassword', component: ChangepasswordComponent },
+    { path: 'myprofile', component: MyprofileComponent },
 
-    // ***********PRODUCT*************
+    // ROLE
+    { path: 'role', component: RoleComponent },
+    { path: 'rolelist', component: RoleListComponent },
+    { path: 'role/:id', component: RoleComponent },
 
-    {
-        path: 'product',
-        component: ProductComponent
+    // COURSE
+    { path: 'course', component: CourseComponent },
+    { path: 'courselist', component: CourseListComponent },
+    { path: 'course/:id', component: CourseComponent },
 
-    },
-    {
-        path: 'productlist',
-        component: ProductListComponent
+    // FACULTY
+    { path: 'faculty', component: FacultyComponent },
+    { path: 'facultylist', component: FacultyListComponent },
+    { path: 'faculty/:id', component: FacultyComponent },
 
-    },
-    {
-        path: 'product/:id',
-        component: ProductComponent
+    // TIMETABLE
+    { path: 'timetable', component: TimetableComponent },
+    { path: 'timetablelist', component: TimetableListComponent },
+    { path: 'timetable/:id', component: TimetableComponent },
 
-    },
+    // SUBJECT
+    { path: 'subject', component: SubjectComponent },
+    { path: 'subjectlist', component: SubjectListComponent },
+    { path: 'subject/:id', component: SubjectComponent },
 
-    // ======================================
-    {
-        path: 'loader',
-        component: LoaderComponent
-
-    },
-    {
-        path: 'login',
-        component: LoginComponent
-    }
-    ,
-    {
-        path: 'login/:userparams',
-        component: LoginComponent
-    },
-
-    {
-        path: 'spinner',
-        component: SpinnerComponent
-    },
-    {
-        path: 'forgotpassword',
-        component: ForgotPasswordComponent
-    },
-    {
-        path: 'signup',
-        component: SignUpComponent
-    },
-    {
-        path: 'message',
-        component: MessageComponent,
-
-    },
-    {
-        path: 'message/:id',
-        component: MessageComponent
-    },
-    {
-        path: 'messagelist',
-        component: MessageListComponent
-
-    },
-    {
-        path: 'marksheet',
-        component: MarksheetComponent
-
-    },
-    {
-        path: 'marksheet/:id',
-        component: MarksheetComponent
-
-    },
-    {
-        path: 'marksheetlist',
-        component: MarksheetListComponent
-
-    },
-    {
-        path: 'marksheetmeritlist',
-        component: MarksheetmeritListComponent
-
-    },
-    {
-        path: 'getmarksheet',
-        component: GetmarksheetComponent
-
-    },
-    {
-        path: 'college',
-        component: CollegeComponent
-
-    },
-    {
-        path: 'college/:id',
-        component: CollegeComponent
-
-    },
-    {
-        path: 'collegelist',
-        component: CollegeListComponent
-
-    },
-    {
-        path: 'student',
-        component: StudentComponent
-
-    },
-    {
-        path: 'student/:id',
-        component: StudentComponent
-
-    },
-    {
-        path: 'studentlist',
-        component: StudentListComponent
-
-    },
-    {
-        path: 'user',
-        component: UserComponent
-
-    },
-    {
-        path: 'user/:id',
-        component: UserComponent
-
-    },
-    {
-        path: 'userlist',
-        component: UserListComponent
-
-    },
-    {
-        path: 'role',
-        component: RoleComponent
-
-    },
-    {
-        path: 'rolelist',
-        component: RoleListComponent
-
-    },
-    {
-        path: 'role/:id',
-        component: RoleComponent
-
-    },
-    {
-        path: 'course',
-        component: CourseComponent
-
-    },
-    {
-        path: 'courselist',
-        component: CourseListComponent
-
-    },
-    {
-        path: 'course/:id',
-        component: CourseComponent
-
-    },
-    {
-
-        path: 'faculty',
-        component: FacultyComponent
-
-    },
-    {
-        path: 'facultylist',
-        component: FacultyListComponent
-
-    },
-    {
-        path: 'faculty/:id',
-        component: FacultyComponent
-
-    },
-    {
-        path: 'timetable',
-        component: TimetableComponent
-
-
-    },
-    {
-        path: 'timetablelist',
-        component: TimetableListComponent
-
-    },
-    {
-        path: 'timetable/:id',
-        component: TimetableComponent
-
-    },
-    {
-        path: 'subject',
-        component: SubjectComponent
-
-    },
-    {
-        path: 'subjectlist',
-        component: SubjectListComponent
-
-    },
-    {
-        path: 'subject/:id',
-        component: SubjectComponent
-
-    },
-    {
-        path: 'myprofile',
-        component: MyprofileComponent
-    },
-    {
-        path: 'file',
-        component: FileComponent
-    },
-    {
-        path: 'changepassword',
-        component: ChangepasswordComponent
-
-
-    },
-    
-
-
-
-
+    // FILE
+    { path: 'file', component: FileComponent },
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes, { useHash: true })],
     exports: [RouterModule]
 })
-
-
 export class AppRoutingModule { }
