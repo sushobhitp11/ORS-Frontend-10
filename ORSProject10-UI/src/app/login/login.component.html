@@ -40,35 +40,26 @@
             <h1 class="text-primary">{{ 'Login' | translate }}</h1>
           </div>
 
-          <!-- Hidden login URL -->
           <input type="hidden" name="loginUrl" [(ngModel)]="form.loginUrl">
 
-          <!-- ERROR: Invalid ID or Password -->
-          <div *ngIf="form.error && form.message === 'Invalid ID or Password'"
-               class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ 'Invalid ID or Password' | translate }}
-          </div>
-
-          <!-- SUCCESS: Logout -->
-          <div *ngIf="!form.error && form.message === 'Logout Successfully'"
-               class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ 'Log out successfully' | translate }}
-          </div>
-
-          <!-- Session Expired -->
-          <div *ngIf="form.error && form.message === 'Your Session has been Expired! Please Re-Login'"
+          <!-- ERROR MESSAGE -->
+          <div *ngIf="form.error && form.message"
                class="alert alert-danger alert-dismissible">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             {{ form.message | translate }}
           </div>
 
-          <!-- ----------------- EMAIL ----------------- -->
+          <!-- SUCCESS MESSAGE -->
+          <div *ngIf="!form.error && form.message"
+               class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ form.message | translate }}
+          </div>
+
+          <!-- EMAIL -->
           <div style="padding-top:3%">
             <span class="pt-2"><b>{{ 'Email Id' | translate }}</b>
-              <span class="required-field"></span>
-            </span>
+              <span class="required-field"></span></span>
 
             <div class="col-sm-12">
               <div class="input-group">
@@ -83,18 +74,17 @@
               </div>
             </div>
 
-            <span *ngIf="form.inputerror?.loginId"
+            <span *ngIf="inputerror?.loginId"
                   class="alertRedColor"
                   style="color:red;">
-              {{ 'loginId' | translate }}
+              {{ inputerror.loginId }}
             </span>
           </div>
 
-          <!-- ----------------- PASSWORD ----------------- -->
+          <!-- PASSWORD -->
           <div style="padding-top:3%">
             <span><b>{{ 'Password' | translate }}</b>
-              <span class="required-field"></span>
-            </span>
+              <span class="required-field"></span></span>
 
             <div class="col-sm-12">
               <div class="input-group">
@@ -109,14 +99,14 @@
               </div>
             </div>
 
-            <span *ngIf="form.inputerror?.password"
+            <span *ngIf="inputerror?.password"
                   class="alertRedColor"
                   style="color:red;">
-              {{ 'password' | translate }}
+              {{ inputerror.password }}
             </span>
           </div>
 
-          <!-- ----------------- BUTTONS ----------------- -->
+          <!-- BUTTONS -->
           <div class="row pt-3 pb-3" style="text-align:center;">
             <div class="col-sm-6 pt-2">
               <button type="button"
