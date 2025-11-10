@@ -7,11 +7,5 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
-  ],
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": false,
-    "strictTemplates": false,
-    "enableIvy": false,
-    "preserveWhitespaces": false
-  }
+  ]
 }

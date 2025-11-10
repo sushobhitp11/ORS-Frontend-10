@@ -9,88 +9,63 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './marksheet-list.component.html',
   styleUrls: ['./marksheet.component.css']
 })
-export class MarksheetListComponent extends BaseListCtl {
 
+export class MarksheetListComponent extends BaseListCtl {
   imageToShow: any;
   myKey = "";
+
   
-  constructor(
-    public locator: ServiceLocatorService, 
-    public route: ActivatedRoute, 
-    private httpClient: HttpClient
-  ) {
+createImageFromBlob(image: Blob) {
+  let reader = new FileReader();
+  reader.addEventListener("load", () => {
+     this.imageToShow = reader.result;
+  
+  }, false);
+
+  if (image) {
+     reader.readAsDataURL(image);
+  }
+}
+
+ public form = {
+
+   error: false, //error 
+   message: null, //error or success message
+   preload: [], // preload data
+   data: { id: null}, //form data
+   inputerror: {}, // form input error messages
+   searchParams: {}, //search form
+   searchMessage: null, //search result message
+   list: [ ], // search list 
+   pageNo: 0
+ };
+
+
+ selectedFile: File;
+ retrievedImage: any;
+ base64Data: any;
+ retrieveResonse: any;
+ message: string;
+ imageName: any;
+  constructor(public locator: ServiceLocatorService, public route: ActivatedRoute, private httpClient: HttpClient) {
     super(locator.endpoints.MARKSHEET, locator, route);
   }
 
-  // ✅ FIXED FORM STRUCTURE (AOT-SAFE)
-  form: any = {
-    error: false,
-    message: null,
-    
-    preload: {
-      marksheetList: []   // ✅ HTML needs this
-    },
-
-    data: {
-      id: 0               // ✅ HTML checks form.data.id
-    },
-
-    inputerror: {},
-
-    searchParams: {
-      name: '',
-      id: ''
-    },
-
-    searchMessage: null,
-
-    list: [],             // ✅ Table loops on form.list
-    pageNo: 0
-  };
-
-  selectedFile: File;
-  retrievedImage: any;
-  base64Data: any;
-  retrieveResonse: any;
-  message: string;
-  imageName: any;
-
-  // ✅ REQUIRED BY HTML — MUST EXIST
-  isMasterSel: boolean = false;
-  nextList: number = 1;
-
-  // ✅ AOT-SAFE: must exist (even empty)
-  deleteMany() {}
-  forward(url: string) { super.forward(url); }
-  previous() { super.previous(); }
-  next() { super.next(); }
-  exit() {}
-  checkUncheckAll(event: any) {}
-  checklistUpdate() {}
-
-  createImageFromBlob(image: Blob) {
-    let reader = new FileReader();
-    reader.addEventListener("load", () => {
-      this.imageToShow = reader.result;
-    }, false);
-
-    if (image) {
-      reader.readAsDataURL(image);
-    }
-  }
-
-  getImage(id: any) {
+  getImage(id) {
+    //Make a call to Sprinf Boot to get the Image Bytes.
     this.form.data.id = id;
-
-    this.httpClient.get(
-      'http://localhost:8084/Marksheet/profilePic/' + id,
-      { responseType: 'blob' }
-    ).subscribe(data => {
+    console.log(this.form.data.id);
+    
+    this.httpClient.get('http://localhost:8084/Marksheet/profilePic/'+this.form.data.id, { responseType: 'blob' }).subscribe(data => {
       this.createImageFromBlob(data);
-      this.myKey = id;
+      this.myKey= this.form.data.id;
     }, error => {
+      
       console.log(error);
     });
+
   }
 
 }
+
+
