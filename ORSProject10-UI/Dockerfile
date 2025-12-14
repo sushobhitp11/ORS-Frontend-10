@@ -1,17 +1,18 @@
 # Stage 1 — Build Angular App (Apple Silicon Compatible)
 # build stage
-FROM node:16.17.0 AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-COPY . .
-RUN npm run build
-
-# runtime stage
+# ---------- Runtime Stage ----------
 FROM nginx:alpine
-COPY --from=build /app/dist/P10-UI /usr/share/nginx/html
+
+# Remove default nginx config
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy already-built Angular dist
+COPY dist/P10-UI/ /usr/share/nginx/html/
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
+
 
 # # Use an official Node.js runtime as the base image
 # FROM node:14 as build
