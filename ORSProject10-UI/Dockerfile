@@ -1,18 +1,15 @@
 # Stage 1 — Build Angular App (Apple Silicon Compatible)
-FROM --platform=linux/arm64 node:16 AS build
+# Build stage
+FROM node:16.17.0 AS build
 WORKDIR /app
 COPY . .
-RUN npm install
-RUN npm run build --configuration production
+RUN npm install --legacy-peer-deps
+RUN npm run build -- --configuration production
 
-# Stage 2 — Serve with NGINX
+# Runtime stage
 FROM nginx:alpine
-# Clean default Nginx html folder
-RUN rm -rf /usr/share/nginx/html/*
-# Copy built Angular files to Nginx folder
-COPY --from=build /app/dist/P10-UI /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
 
 
 # # Use an official Node.js runtime as the base image
