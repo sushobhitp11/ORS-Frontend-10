@@ -36,8 +36,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { MyprofileComponent } from './user/myprofile.component';
 import { ProductComponent } from './product/product.component';
 import { ProductListComponent } from './product/product-list.component';
-import { CustomerComponent } from './customer/customer.component';
-import { CustomerlistComponent } from './customer/customer-list.component';
+
 
 
 
@@ -52,28 +51,6 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent
     },
-
-
-    // ***********CUSTOMER*************
-
-    {
-        path: 'customer',
-        component: CustomerComponent
-
-    },
-    {
-        path: 'customerlist',
-        component: CustomerlistComponent
-
-    },
-    {
-        path: 'customet/:id',
-        component: CustomerComponent
-
-    },
-
-
-   
 
     // ***********PRODUCT*************
 
