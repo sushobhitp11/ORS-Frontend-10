@@ -36,12 +36,14 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { MyprofileComponent } from './user/myprofile.component';
 import { ProductComponent } from './product/product.component';
 import { ProductListComponent } from './product/product-list.component';
-
+import { CustomerComponent } from './customer/customer.component';
+import { CustomerlistComponent } from './customer/customer-list.component';
+import { PositionComponent } from './position/position.component';
+import { PositionListComponent } from './position/position-list.component';
 
 
 
 const routes: Routes = [
-
     {
         path: '',
         redirectTo: 'dashboard',
@@ -51,6 +53,28 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent
     },
+
+
+    // ***********CUSTOMER*************
+
+    {
+        path: 'customer',
+        component: CustomerComponent
+
+    },
+    {
+        path: 'customerlist',
+        component: CustomerlistComponent
+
+    },
+    {
+        path: 'customet/:id',
+        component: CustomerComponent
+
+    },
+
+
+   
 
     // ***********PRODUCT*************
 
@@ -273,9 +297,20 @@ const routes: Routes = [
 
 
     },
+    {
+        path: 'position',
+        component: PositionComponent
+    },
+    {
+        path: 'positionlist',
+        component: PositionListComponent
+    },
+    {
+        path: 'position/:id',
+        component: PositionComponent
+
+    },
     
-
-
 
 
 ];

@@ -49,7 +49,7 @@ export class HttpServiceService {
       this.form.error = true;
       this.userparams.url = this.router.url;// to navigate the URI request.
       this.router.navigateByUrl("/login");
-      console.log("Amit Bansal");
+      console.log("Sushobhit pandey");
 
       return true;
     } else {
@@ -63,9 +63,12 @@ export class HttpServiceService {
       console.log('inside isLogout() return true');
       return true;
     }
-    return this.httpClient.get(endpoint).subscribe((data) => {
+    return this.httpClient.get(endpoint).subscribe(function(data) {
       console.log('Data :: ' + data);
       callback(data);
+
+      }, error => {
+      console.log('ORS Error--', error);
 
     });
   }
@@ -80,9 +83,8 @@ export class HttpServiceService {
       callback(data);
 
     }, error => {
-
       console.log('ORS Error--', error);
-    }); ``
+    });
   }
 
 

@@ -9,6 +9,7 @@ import { element } from '@angular/core/src/render3';
 export class BaseListCtl extends BaseCtl {
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
+  // 11. ye line single checkbox ke liye #Checkboxes se bind kiya hua hai 
   deleteRecordList: any = [];
   isMasterSel: boolean = false;
   checkList = 0;

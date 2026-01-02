@@ -6,7 +6,7 @@
   }
 </style>
 
-<div class="content-wrapper" style=" padding-top: 7%;
+<div class="content-wrapper" style=" padding-top: 12%;
 background: url(assets/files/wall.jpg) no-repeat center center;
 background-attachment: fixed;
 background-size: cover;width:auto;
@@ -30,15 +30,25 @@ background-size: cover;width:auto;
         </div>
 
 
-        <!-- <div class="col-sm-2">
+        <div class="col-sm-2">
           <input type="date" class="form-control" [(ngModel)]="form.searchParams.dob"
             placeholder="{{'Search dob' | translate}}">
+        </div>
+        
 
-        </div> -->
+        <!--<div class=" col-sm-2">
+        <select class="form-control" name="gender" id="gender" [(ngModel)]="form.searchParams.gender" aria-label="ngSelected">
+            <option [ngValue]="" value="undefined">{{' Select Gender' | translate }}</option>
+            <option value="Male">{{'Male' | translate }} </option>
+            <option value="Female">{{'Female' | translate }} </option>
+          </select>
+        </div>
 
-        <!-- <div class="col-sm-2">
+
+        <div class="col-sm-2">
           <input type="text" class="form-control" [(ngModel)]="form.searchParams.loginId" placeholder="{{'Search Email' | translate}}">
         </div> -->
+
         <div class="col-sm-2">
 
           <select class="form-control" name="roleId" [(ngModel)]="form.searchParams.roleId" aria-label="ngSelected">
@@ -49,6 +59,8 @@ background-size: cover;width:auto;
         <div class="col-sm-2">
           <!-- <input type="text" class="form-control" [(ngModel)]="form.searchParams.status" placeholder="{{'Search Status' | translate}}"> -->
         </div>
+
+
         <div class="col-sm-1 ml-3">
           <button (click)="submit()" class="btn btn-primary">
             {{'Search' | translate }}</button>
@@ -165,4 +177,3 @@ background-size: cover;width:auto;
     </div>
   </div>
 </div>
-<app-footer></app-footer>

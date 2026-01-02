@@ -15,7 +15,6 @@ import { CollegeComponent } from './college/college.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-
 import { HttpServiceService } from './http-service.service';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -55,7 +54,10 @@ import { AuthService } from './auth.service';
 import { MyprofileComponent } from './user/myprofile.component';
 import { ProductComponent } from './product/product.component';
 import { ProductListComponent } from './product/product-list.component';
-
+import { CustomerComponent } from './customer/customer.component';
+import { CustomerlistComponent } from './customer/customer-list.component';
+import { PositionComponent } from './position/position.component';
+import { PositionListComponent } from './position/position-list.component';
 
 
 
@@ -111,7 +113,10 @@ export function myHttpLoader(http: HttpClient) {
     MyprofileComponent,
     ProductComponent,
     ProductListComponent,
-
+    CustomerComponent,
+    CustomerlistComponent,
+    PositionComponent,
+    PositionListComponent
  
 
     
