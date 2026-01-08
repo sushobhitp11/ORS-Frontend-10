@@ -73,19 +73,30 @@ export class HttpServiceService {
     });
   }
 
-  post(endpoint, bean, callback) {
-    if (this.isLogout()) {
-      console.log('inside isLogout return true')
-      return true;
-    }
-    return this.httpClient.post(endpoint, bean).subscribe((data) => {
+  post(endpoint, bean, callback, errorCallback?) {
+
+  if (this.isLogout()) {
+    console.log('inside isLogout return true');
+    return;
+  }
+
+  return this.httpClient.post(endpoint, bean).subscribe(
+
+    (data) => {
       console.log(data);
       callback(data);
+    },
 
-    }, error => {
+    (error) => {
       console.log('ORS Error--', error);
-    });
-  }
+
+      if (errorCallback) {
+        errorCallback(error);
+      }
+    }
+
+  );
+}
 
 
 }
