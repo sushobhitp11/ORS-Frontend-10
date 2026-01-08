@@ -10,7 +10,7 @@ import { ServiceLocatorService } from 'src/app/service-locator.service';
   templateUrl: './position-list.component.html',
   styleUrls: ['./position-list.component.css']
 })
-export class PositionListComponent extends BaseListCtl implements OnInit {
+export class PositionListComponent extends BaseListCtl {
  myKey = "";
   errorMessageDesignation: string = '';
 
@@ -47,6 +47,13 @@ export class PositionListComponent extends BaseListCtl implements OnInit {
       event.preventDefault();
       this.errorMessageDesignation = 'Only alphabets are allowed.';
       return;
+    }
+     if (inputValue.length < 3) {
+      this.errorMessageDesignation = 'name must be at least 3 characters .';
+    } else if (inputValue.length > 3) {
+      this.errorMessageDesignation = 'name must contain only character.';
+    } else {
+      this.errorMessageDesignation = '';  // Clear error message if valid
     }
 
   }

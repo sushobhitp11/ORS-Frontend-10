@@ -68,7 +68,7 @@ const routes: Routes = [
 
     },
     {
-        path: 'customet/:id',
+        path: 'customer/:id',
         component: CustomerComponent
 
     },
