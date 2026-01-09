@@ -148,7 +148,7 @@ export class LoginComponent implements OnInit {
       _self.form.error = true;
 
       if (error.status === 0) {
-        _self.form.message = "Server is not reachable. Please try again later.";
+        _self.form.message = "Internal Server is not reachable. Please try again later.";
       } else if (error.status === 404) {
         _self.form.message = "Login service not found.";
       } else if (error.status === 500) {
