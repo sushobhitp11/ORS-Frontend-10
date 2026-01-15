@@ -90,6 +90,21 @@ export class HttpServiceService {
     (error) => {
       console.log('ORS Error--', error);
 
+      let msg = 'Service is currently unavailable';
+
+      if (error && error.error && error.error.result && error.error.result.message) {
+        msg = error.error.result.message;
+      }
+
+      const errorRes = {
+        success: false,
+        result: {
+          message: msg
+        }
+      };
+
+      callback(errorRes);
+
       if (errorCallback) {
         errorCallback(error);
       }

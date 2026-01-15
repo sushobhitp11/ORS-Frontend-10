@@ -40,7 +40,8 @@ import { CustomerComponent } from './customer/customer.component';
 import { CustomerlistComponent } from './customer/customer-list.component';
 import { PositionComponent } from './position/position.component';
 import { PositionListComponent } from './position/position-list.component';
-
+import { OrderComponent } from './order/order.component';
+import { OrderlistComponent } from './order/orderlist.component';
 
 
 const routes: Routes = [
@@ -52,6 +53,24 @@ const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent
+    },
+
+    // ***********ORDER*************
+
+    {
+        path: 'order',
+        component: OrderComponent
+
+    },
+    {
+        path: 'orderlist',
+        component: OrderlistComponent
+
+    },
+    {
+        path: 'order/:id',
+        component: OrderComponent
+
     },
 
 

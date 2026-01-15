@@ -58,6 +58,8 @@ import { CustomerComponent } from './customer/customer.component';
 import { CustomerlistComponent } from './customer/customer-list.component';
 import { PositionComponent } from './position/position.component';
 import { PositionListComponent } from './position/position-list.component';
+import { OrderComponent } from './order/order.component';
+import { OrderlistComponent } from './order/orderlist.component';
 
 
 
@@ -113,8 +115,9 @@ export function myHttpLoader(http: HttpClient) {
     CustomerComponent,
     CustomerlistComponent,
     PositionComponent,
-    PositionListComponent
- 
+    PositionListComponent,
+    OrderComponent,
+    OrderlistComponent,
 
     
   ],

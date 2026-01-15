@@ -90,74 +90,51 @@ export class LoginComponent implements OnInit {
   }
 
 
-  signIn() {
-
-  var _self = this;
-  this.form.error = false;
-  this.form.message = '';
-
-  const requestedUrl = this.httpService.userparams.url; // to get the URI
-  console.log('signIn----', this.form);
-
-  this.httpService.post(
-    this.endpoint + "/login",
-    this.form,
-
-    // ✅ SUCCESS CALLBACK
-    function (res) {
+ signIn() {
+    var _self = this;   
+    this.form.error = false;
+    const requestedUrl = this.httpService.userparams.url;//to get the URI
+    console.log('signIn----', this.form);
+    this.httpService.post(this.endpoint + "/login", this.form, function (res) {
 
       console.log('MyResponse', res);
 
+      
       _self.form.message = '';
       _self.inputerror = {};
-
-      if (_self.dataValidator.isNotNullObject(res.message)) {
-        _self.form.message = res.message[0];
+      //_self.form.loginId = res.result.loginId;
+      if (_self.dataValidator.isNotNullObject(res.result.message)) {
+        _self.form.message = res.result.message;
       }
 
       _self.form.error = !res.success;
 
-      if (_self.dataValidator.isNotNullObject(res.inputerror)) {
-        _self.inputerror = res.inputerror;
+      if (_self.dataValidator.isNotNullObject(res.result.inputerror)) {
+        _self.inputerror = res.result.inputerror;
       }
 
       if (_self.dataValidator.isTrue(res.success)) {
 
         _self.httpService.setToken(res.result.token);
-
         localStorage.setItem("loginId", res.result.loginId);
-        localStorage.setItem("token", "Bearer " + res.result.token);
+        let tokenStr = "Bearer " + res.result.token;
+        localStorage.setItem("token", tokenStr);
         localStorage.setItem("role", res.result.role);
         localStorage.setItem("fname", res.result.fname);
         localStorage.setItem("lname", res.result.lname);
         localStorage.setItem("userid", res.result.data.id);
+     //   console.log(res.result.data.id + 'sessionId set ----');
+     //   console.log(res.result.token + '  Token set ----');
+
 
         if (requestedUrl != null && requestedUrl != '') {
           _self.router.navigateByUrl(requestedUrl);
+          
         } else {
           _self.router.navigateByUrl('dashboard');
         }
       }
-    },
-
-    // ✅ ERROR CALLBACK (YE NAYA ADD HUA HAI)
-    function (error) {
-
-      console.error("Login API error", error);
-
-      _self.form.error = true;
-
-      if (error.status === 0) {
-        _self.form.message = "Internal Server is not reachable. Please try again later.";
-      } else if (error.status === 404) {
-        _self.form.message = "Login service not found.";
-      } else if (error.status === 500) {
-        _self.form.message = "Server error. Please try again later.";
-      } else {
-        _self.form.message = "Something went wrong.";
-      }
-    }
-  );
-}
+    });
+  }
 
 }

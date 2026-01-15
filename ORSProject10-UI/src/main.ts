@@ -7,8 +7,6 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
-localStorage.clear();
-sessionStorage.clear();
 
 
 platformBrowserDynamic().bootstrapModule(AppModule)
